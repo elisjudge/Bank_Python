@@ -13,3 +13,7 @@ The program was originally written in C#, however I have reimplemented it using 
 1. Clone this repository: `git clone (PROJECT URL GOES HERE)`
 2. Navigate to the project folder: `cd your-folder`
 3. Run the application: `python main.py`
+
+## Version History & Usage
+
+- Version 1.0: Creates an Account, performs deposit and withdraw functions and prints balance to the terminal.
