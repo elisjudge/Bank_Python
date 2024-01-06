@@ -1,49 +1,47 @@
 from enum import Enum
 
 from account import Account
+from depositTransaction import DepositTransaction
+from withdrawTransaction import WithdrawTransaction
+from transferTransaction import TransferTransaction
+
 
 class MenuOption(Enum):
     DEPOSIT = 1
     WITHDRAW = 2
-    PRINT = 3
-    QUIT = 4
+    TRANSFER = 3
+    PRINT = 4
+    QUIT = 5
 
 
 def doDeposit(account):
-    deposit_success = False
-
-    while True:
-        try:
-            deposit_amount = float(input("Please enter the amount that you wish to deposit: "))
-            break
-        except ValueError:
-            print("Please ensure that you are entering a valid deposit.")
-        
-    deposit_success = account.deposit(deposit_amount)
-
-    if deposit_success:
-        print("Deposit was successful.")
-    elif not deposit_success:
-        print("Deposit was not successful. Please use non-negative values")
+    try:
+        deposit_amount = float(input("Please enter the amount that you wish to deposit: "))
+        transaction = DepositTransaction(account, deposit_amount)
+        transaction.execute()
+        transaction.print()
+    except Exception as e:
+        print(f"Exception: {e}")
 
 
 def doWithdrawal(account):
-    withdraw_success = False
+    try:
+        withdraw_amount = float(input("Please enter the amount that you wish to withdraw: "))
+        transaction = WithdrawTransaction(account, withdraw_amount)
+        transaction.execute()
+        transaction.print()
+    except Exception as e:
+        print(f"Exception: {e}")
 
-    while True:
-        try:
-            withdraw_amount = float(input("Please enter the amount you wish to withdraw: "))
-            break
-        except ValueError:
-            print("Please ensure that you are entering a valid withdrawal.")
-    
-    withdraw_success = account.withdraw(withdraw_amount)
 
-    if withdraw_success:
-        print("Withdrawal was successful.")
-    elif not withdraw_success:
-        print("Withdrawal was not successful")
-        print("Please use non-negative values and ensure that value does not exceed account balance.")
+def doTransfer(from_account, to_account):
+    try:
+        transfer_amount = float(input(f"What amount will you be transferring to {to_account.name}?: "))
+        transaction = TransferTransaction(from_account, to_account, transfer_amount)
+        transaction.execute()
+        transaction.print()
+    except Exception as e:
+        print(f"Exception: {e}")
 
 
 def doPrint(account):
@@ -51,17 +49,21 @@ def doPrint(account):
 
 
 def main():
-    account = Account("John", 100.0)
+    account_01 = Account("John", 100.0)
+    account_02 = Account("Mike", 100.0)
 
     while True:
         user_option = readUserOption()
 
         if user_option == MenuOption.DEPOSIT:
-            doDeposit(account)
+            doDeposit(account_01)
         elif user_option == MenuOption.WITHDRAW:
-            doWithdrawal(account)
+            doWithdrawal(account_01)
+        elif user_option == MenuOption.TRANSFER:
+            doTransfer(account_01, account_02)
         elif user_option == MenuOption.PRINT:
-            doPrint(account)
+            doPrint(account_01)
+            doPrint(account_02)
         elif user_option == MenuOption.QUIT:
             print("Quit")
             break
@@ -72,12 +74,13 @@ def readUserOption():
         print("""\nChoose an option:
               1. Deposit Funds,
               2. Withdraw Funds,
-              3. Show Account Balance,
-              4. Quit """)
+              3. Transfer Funds,
+              4. Show Account Balance,
+              5. Quit """)
         
         try:
-            option = int(input("Enter your choice (1-4): "))
-            if option in range(1,5):
+            option = int(input("Enter your choice (1-5): "))
+            if option in range(1,6):
                 return MenuOption(option)
             else:
                 print("Invalid option. Please make sure that you select a valid option")
