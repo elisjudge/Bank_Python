@@ -1,6 +1,7 @@
 class Bank:
     def __init__(self):
         self._accounts = []
+        self._transactions = []
 
 
     def add_account(self, account):
@@ -16,3 +17,9 @@ class Bank:
 
     def execute_transaction(self, transaction):
         transaction.execute()
+        self._transactions.append(transaction)
+
+
+    def print_transaction_history(self):
+        for transaction in self._transactions:
+            transaction.print()

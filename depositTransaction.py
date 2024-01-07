@@ -1,40 +1,22 @@
-class DepositTransaction:
-    def __init__(self, account, amount):
-        self._account = account
-        self._amount = amount
-        
-        self._executed = False
-        self._succeeded = False
-        self._reversed = False
+from transaction import Transaction
 
+class DepositTransaction(Transaction):
+    def __init__(self, account, amount):
+        super().__init__(amount)
+        self._account = account
+        self._succeeded = False
 
     @property
     def succeeded(self):
         return self._succeeded
     
-    
-    @property
-    def executed(self):
-        return self._executed
-    
-
-    @property
-    def reversed(self):
-        return self._reversed
-    
-
     def execute(self):
-        if self._executed:
-            raise Exception("Cannot execute this transaction as it has already been executed.") 
-        self._executed = True
+        super().execute()
         self._succeeded = self._account.deposit(self._amount)
 
 
     def rollback(self):
-        if not self._executed:
-            raise Exception("Cannot reverse a transaction that has not already been executed")
-        if self._reversed:
-            raise Exception("Cannot reverse a transaction that has already been reversed")
+        super().rollback()
         if self._account.withdraw(self._amount):
             self._reversed = True
             self._executed = False

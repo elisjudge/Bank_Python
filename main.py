@@ -13,7 +13,8 @@ class MenuOption(Enum):
     WITHDRAW = 3
     TRANSFER = 4
     PRINT = 5
-    QUIT = 6
+    PRINTTRANSACTIONS = 6
+    QUIT = 7
 
 
 def doAddAccount(to_bank):
@@ -127,6 +128,8 @@ def main():
             doTransfer(bank)
         elif user_option == MenuOption.PRINT:
             doPrint(bank)
+        elif user_option == MenuOption.PRINTTRANSACTIONS:
+            bank.print_transaction_history()
         elif user_option == MenuOption.QUIT:
             print("Quit")
             break
@@ -140,11 +143,12 @@ def readUserOption():
               3. Withdraw Funds,
               4. Transfer Funds,
               5. Show Account Balance,
-              6. Quit """)
+              6. Show List of Transactions,
+              7. Quit """)
         
         try:
-            option = int(input("Enter your choice (1-6): "))
-            if option in range(1,7):
+            option = int(input("Enter your choice (1-7): "))
+            if option in range(1,8):
                 return MenuOption(option)
             else:
                 print("Invalid option. Please make sure that you select a valid option")
